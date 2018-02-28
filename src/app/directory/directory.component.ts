@@ -1,4 +1,5 @@
-import { Component, OnDestroy, trigger, state, animate, transition, style } from '@angular/core';
+import { Component, OnDestroy} from '@angular/core';
+import { trigger, state, animate, transition, style } from '@angular/animations';
 import { Router } from '@angular/router';
 import { DirectoryService, DirectoryI, DirectoryItemI } from '../directory.service';
 import { StorageService } from '../storage.service';
