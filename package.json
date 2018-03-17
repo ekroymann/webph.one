@@ -10,9 +10,12 @@
     "test": "ng test --watch false",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-prod": "ts-node git.version.ts && ng build --prod --build-optimizer --aot && node src/service-worker/rollup.js",
-    "postbuild-prod": "ts-node git.version.ts",
-    "build-sw": "node src/service-worker/rollup.js"
+    "ngsw-config": "node_modules/.bin/ngsw-config dist src/ngsw-config.json",
+    "ngsw-copy": "cp node_modules/@angular/service-worker/ngsw-worker.js dist/",
+    "serve-prod-ngsw": "npm run build-prod-ngsw && http-server dist -p 8080",
+    "build-prod": "ts-node git.version.ts && ng build --prod --build-optimizer --aot && npm run ngsw-config && npm run ngsw-copy",
+    "build-compose": "ts-node git.version.ts && ng build --prod --env=compose --build-optimizer --aot && npm run ngsw-config && npm run ngsw-copy",
+    "postbuild-prod": "ts-node git.version.ts"
   },
   "private": true,
   "dependencies": {
@@ -28,7 +31,7 @@
     "@angular/platform-browser-dynamic": "^5.2.6",
     "@angular/platform-server": "^5.2.6",
     "@angular/router": "^5.2.6",
-    "@angular/service-worker": "^1.0.0-beta.16",
+    "@angular/service-worker": "^5.2.6",
     "callstats-jssip": "^1.0.0",
     "core-js": "^2.5.1",
     "hammer-timejs": "^1.1.0",
@@ -38,7 +41,7 @@
     "pouchdb": "^6.3.4",
     "pouchdb-find": "^6.3.4",
     "rxjs": "^5.5.6",
-    "zone.js": "^0.8.18"
+    "zone.js": "^0.8.20"
   },
   "devDependencies": {
     "@angular/cli": "^1.4.5",

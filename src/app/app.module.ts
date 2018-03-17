@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { NgServiceWorker } from '@angular/service-worker';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -72,6 +72,7 @@ export const appRoutes: Routes  = [
         useHash: true
       }
     ),
+    ServiceWorkerModule.register('/ngsw-worker.js'),
     CustomMaterialModule,
     BrowserAnimationsModule,
     BrowserModule,
@@ -87,7 +88,6 @@ export const appRoutes: Routes  = [
     DirectoryService,
     StorageService,
     UserService,
-    NgServiceWorker,
     CallSurveyService,
     GuiNotificationsService,
     SmsService,

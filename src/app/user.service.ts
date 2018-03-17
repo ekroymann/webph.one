@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgServiceWorker, NgPushRegistration } from '@angular/service-worker';
+import { SwPush } from '@angular/service-worker';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -48,12 +48,12 @@ export class UserService {
   private _prefix = settings.custom.virtualNumberPrefix;
   private _ready = new BehaviorSubject(false);
   private _busy = false;
-  private registration: NgPushRegistration;
+  private subscription: PushSubscription;
 
   constructor(
     private _storageService: StorageService,
     private _http: Http,
-    private _ngServiceWorker: NgServiceWorker,
+    private _swPush: SwPush,
     private _guiNotification: GuiNotificationsService
     ) {
     _storageService
@@ -121,27 +121,24 @@ export class UserService {
     this._http.get(this._pushNotificationServer + 'publicKey')
     .map(x => x.json())
     .subscribe(result => {
-      this._ngServiceWorker.registerForPush({
-        applicationServerKey: result.key
-      }).subscribe(
-        (r: NgPushRegistration) => {
-          this.sendRegistration(r, user);
-        },
-        err => {
-          if ( err ) {
-            console.log('[PUSH NOTIFICATIONS] - Error on registration', err); 
-            this._guiNotification.send({
-              text:'You have denied permission to show notifications. This permission is used to let you know when there is an incoming call when you have the application closed or in the background.',
-              timeout: 10000
-            });
-          }
+      this._swPush.requestSubscription({
+        serverPublicKey: result.key
+      }).then((subscription) => {
+        this.sendRegistration(subscription, user);
+      }).catch((error) => {
+        if ( error ) {
+          console.log('[PUSH NOTIFICATIONS] - Error on registration', error);
+          this._guiNotification.send({
+            text:'You have denied permission to show notifications. This permission is used to let you know when there is an incoming call when you have the application closed or in the background.',
+            timeout: 10000
+          });
         }
-      );
+      })
     });
   }
 
-  sendRegistration(r: NgPushRegistration, user: UserI) {
-    const rJson: any = r.toJSON();
+  sendRegistration(sub: PushSubscription, user: UserI) {
+    const rJson: any = sub.toJSON();
     this._http.post(this._pushNotificationServer + 'save', {
       user: user.user,
       endpoint: rJson.endpoint,

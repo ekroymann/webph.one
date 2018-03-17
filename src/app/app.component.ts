@@ -144,7 +144,7 @@ export class AppComponent {
                     this.userService.subscribeToPush(this.userService.userData().getValue());
                   }
                 })
-                .catch( err => console.log('[SW] - Erron on subscription'));
+                .catch( err => console.log('[SW] - Error on subscription', err));
               } else {
                 console.log('[SW] - Error Registration not found', registration);
               }
