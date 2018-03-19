@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { CommonModule } from '@angular/common';  
 
 import { JsSipService } from './jssip.service';
 import { DirectoryService, DirectoryItemI } from './directory.service';
@@ -10,7 +11,10 @@ import { GuiNotificationsService } from './gui-notifications.service';
 import { versions } from '../environments/versions';
 
 import {DomSanitizer} from '@angular/platform-browser';
-import {MdIconRegistry} from '@angular/material';
+import {MatIconRegistry} from '@angular/material';
+
+//translate
+import {TranslateService} from '@ngx-translate/core';
 
 // Until it is decided to remove the support
 // to the versions prior to the release.
@@ -23,15 +27,16 @@ import { StorageService } from './storage.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  call:Object = this.translate.get('call').subscribe((res) => {res.calling; console.log(res)});
   /** This object manages the top navigation bar. */
   public links: any[] = [
-    { label: 'Call', link: '/call' },
+    { label: "call", link: '/call' },
     { label: 'Directory', link: '/directory' },
     { label: 'Share', link: '/share' }
   ];
 
   constructor(
-    public iconRegistry: MdIconRegistry,
+    public iconRegistry: MatIconRegistry,
     public sanitizer: DomSanitizer,
     public directoryService: DirectoryService,
     private userService: UserService,
@@ -42,8 +47,14 @@ export class AppComponent {
     private route: ActivatedRoute,
     private router: Router,
     private http: Http,
-   ) {
+    private translate: TranslateService) { 
+    // this language will be used as a fallback when a translation isn't found in the current language
+    translate.setDefaultLang('es');
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use('es');
 
+    translate.get('call').subscribe((res) => {
+    this.call = res.calling; console.log(this.call)});
     // Apply migration from the old database.
     this.checkVersion();
     this.checkDB().then( () => {
@@ -74,6 +85,7 @@ export class AppComponent {
     });
   }
 
+  
   /**
    * Load svg files into material-icons
    * @param icons  Array of svg file names to load, without the extension

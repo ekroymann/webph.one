@@ -9,6 +9,8 @@ import { StorageService } from '../storage.service';
 import { DirectoryItemI } from '../directory.service';
 import { UserService } from '../user.service';
 
+import {TranslateService} from '@ngx-translate/core';
+
 import { versions } from '../../environments/versions';
 
 @Component({
@@ -27,7 +29,9 @@ export class CallComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     public storageService: StorageService,
-    public userService: UserService
+    public userService: UserService,
+    private translate: TranslateService,
+
   ) {
     storageService.table('contacts')
       .read()

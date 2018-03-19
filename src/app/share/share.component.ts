@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { environment } from '../../environments/environment';
@@ -17,7 +17,7 @@ import { ShareDialogComponent } from './share.dialog.component';
 export class ShareComponent implements OnInit {
 
   constructor(
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     private router: Router,
     private _http: Http,
     private _userService: UserService,

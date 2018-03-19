@@ -14,8 +14,8 @@
   (submit)="callSurveyService.submit($event)"
 ></app-call-survey>
 
-<nav md-tab-nav-bar class="topbar">
-  <a md-tab-link
+<nav mat-tab-nav-bar class="topbar">
+  <a mat-tab-link
      *ngFor="let link of links"
      [routerLink]="link.link"
      routerLinkActive #rla="routerLinkActive"

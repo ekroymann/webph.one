@@ -6,7 +6,7 @@
       <div *ngIf="jsSipState.session.status === 9">
         Call established with {{jsSipState.session.remote_identity.display_name}}<br><br>
       </div>
-    <button md-raised-button class="hangup" (click)="hangup.emit()"><md-icon svgIcon="call-end"></md-icon></button>
+    <button mat-raised-button class="hangup" (click)="hangup.emit()"><mat-icon svgIcon="call-end"></mat-icon></button>
   </div>
 </div>
 
@@ -15,7 +15,7 @@
     {{ jsSipState.incomingSession.session.remote_identity.display_name }} is calling!<br>
     <small>{{ jsSipState.incomingSession.session.remote_identity.user }}</small>
     <br><br>
-    <button md-raised-button class="take-call" (click)="take.emit()"><md-icon svgIcon="call"></md-icon></button>
-    <button md-raised-button class="hangup" (click)="reject.emit()"><md-icon svgIcon="call-end"></md-icon></button>
+    <button mat-raised-button class="take-call" (click)="take.emit()"><mat-icon svgIcon="call"></mat-icon></button>
+    <button mat-raised-button class="hangup" (click)="reject.emit()"><mat-icon svgIcon="call-end"></mat-icon></button>
   </div>
 </div>

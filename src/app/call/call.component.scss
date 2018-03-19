@@ -18,13 +18,13 @@
     max-height: 55px;
     align-items: center;
     align-content: stretch;
-    border-bottom: 1px solid #ccc;
+    //border-bottom: 1px solid #ccc;
     margin: 0 10px;
     .input {
         flex: 1;
         font-size: 1.4em;
         color: #444;
-        text-align: right;
+        text-align: center;
         overflow: hidden;
         right: 0px;
     }
@@ -33,7 +33,7 @@
         padding: 20px 0 20px 5px;
     }
     .save {
-      background: green;
+      background: #00DCC0;
       min-width: 50px;
       color: #fff;
       line-height: 29px;
@@ -55,7 +55,7 @@
         align-items: center;
         justify-content: center;
         font-size: 1.5em;
-        color: #1155CD;
+        color: #000000;
         min-width: 0px !important;
     }
     button:focus /deep/ .mat-button-focus-overlay {
@@ -72,12 +72,12 @@
   button {
     color: #fff;
     border: none;
-    border-radius: 7px;
+    border-radius: 0px;
     margin: 5px;
   }
   .call {
     flex: 2;
-    background: green;
+    background: #00DCC0;
   }
   .hangup {
     flex: 1;

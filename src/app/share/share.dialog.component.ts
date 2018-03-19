@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-share-dialog',
@@ -7,5 +7,5 @@ import {MdDialog, MdDialogRef} from '@angular/material';
   styleUrls: ['./share.dialog.component.scss']
 })
 export class ShareDialogComponent {
-  constructor(public dialogRef: MdDialogRef<ShareDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<ShareDialogComponent>) {}
 }

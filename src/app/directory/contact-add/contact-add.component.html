@@ -1,28 +1,28 @@
-<h3 (click)="goBack()"><md-icon svgIcon="arrow-down"></md-icon> 
+<h3 (click)="goBack()"><mat-icon svgIcon="arrow-down"></mat-icon> 
   <span *ngIf="action === 'add'">Add new contact</span>
   <span *ngIf="action === 'edit'">Edit contact</span>
 </h3>
 
 <form [formGroup]="form" (ngSubmit)="submit()">
 
-  <md-input-container class="full-width">
-    <md-icon mdPrefix svgIcon="call"></md-icon>
-    <input type="string" mdInput placeholder="Telephone" formControlName="number" appInputPhonenumber>
-  </md-input-container>
+  <mat-form-field class="full-width">
+    <mat-icon matPrefix svgIcon="call"></mat-icon>
+    <input type="string" matInput placeholder="Telephone" formControlName="number" appInputPhonenumber>
+  </mat-form-field>
   
 
-  <md-input-container class="full-width custom-input">
-    <md-icon mdPrefix svgIcon="person"></md-icon>
-    <input type="text" mdInput placeholder="Name" formControlName="title">
-  </md-input-container>
+  <mat-form-field class="full-width custom-input">
+    <mat-icon matPrefix svgIcon="person"></mat-icon>
+    <input type="text" matInput placeholder="Name" formControlName="title">
+  </mat-form-field>
 
   <div class="bottom" *ngIf="action === 'add'">
-    <button md-button type="submit" class="full-width btn-save">Save</button>
+    <button mat-button type="submit" class="full-width btn-save">Save</button>
   </div>
   
   <div class="bottom" *ngIf="action === 'edit'">
-    <button md-button type="submit" class="half-width btn-save" [disabled]="!form.valid">Edit</button>
-    <button md-button type="submit" (click)="deleteContact($event)" class="half-width btn-delete">Delete</button>
+    <button mat-button type="submit" class="half-width btn-save" [disabled]="!form.valid">Edit</button>
+    <button mat-button type="submit" (click)="deleteContact($event)" class="half-width btn-delete">Delete</button>
   </div>
 
 </form>

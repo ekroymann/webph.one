@@ -7,7 +7,7 @@ h3.mat-subheader {
 .list {
     flex: row-reverse !important;
     color: #1155CD;
-    md-icon {
+    mat-icon {
         width: 30px;
     }
 }
@@ -38,7 +38,7 @@ h3.mat-subheader {
     margin-top: -3px;
 }
 
-.list md-icon {
+.list mat-icon {
     width: 40px;
     padding: 10px;
 }

@@ -16,7 +16,7 @@
         position: absolute;
         top: 15px;
         right: 15px;
-        md-icon {
+        mat-icon {
             fill: #333;
         }
     }
@@ -25,11 +25,11 @@
         color: #fff;
         margin-top: 20px;
     }
-    md-icon.star {
+    mat-icon.star {
         fill: #333;
     }
-    md-icon.star:hover, 
-    md-icon.selected {
+    mat-icon.star:hover, 
+    mat-icon.selected {
         fill: yellow;
     }
     ul {

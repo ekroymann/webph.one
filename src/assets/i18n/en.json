@@ -1,0 +1,9 @@
+{
+    "call": {
+        "calling": "Call",
+        "save": "Save number"
+    },
+    "callservice": {
+        "heading": "Test"
+    }
+}

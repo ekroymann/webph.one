@@ -1,0 +1,11 @@
+{
+    "call": {
+        "calling": "Llamar",
+        "save": "Guardar numero"
+    },
+    "navbar": {
+        "call": "Llamar",
+        "message": "Conversationes",
+        "contacts": "Contactos"
+    }
+}

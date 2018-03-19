@@ -1,14 +1,14 @@
 <div class="survey-box">
-  <button md-icon-button (click)="close()" class="close">
-    <md-icon svgIcon="close">X</md-icon>
+  <button mat-icon-button (click)="close()" class="close">
+    <mat-icon svgIcon="close">X</mat-icon>
   </button>
   <h3>How was the call?</h3>
     <span *ngFor="let number of [1,2,3,4,5]">
-      <md-icon 
+      <mat-icon 
         [svgIcon]="(lastCall.rating >= number)? 'star-full': 'star-border'"
         (click)="setRating(number)"
         [ngClass]="{star: true, selected: (lastCall.rating >= number )}">
-      </md-icon>
+      </mat-icon>
     </span>
   <h4>Any issues?</h4>
   <ul>
@@ -16,9 +16,9 @@
       {{ issue.title }}
     </li>
   </ul>
-  <md-input-container class="comments"  *ngIf="lastCall.issues == 'others_comments'">
-    <input mdInput (keyup)="setComment($event)"/>
-  </md-input-container>
-  <button md-button (click)="send()" class="send">Submit</button>
+  <mat-form-field class="comments"  *ngIf="lastCall.issues == 'others_comments'">
+    <input matInput (keyup)="setComment($event)"/>
+  </mat-form-field>
+  <button mat-button (click)="send()" class="send">Submit</button>
 </div>
 
