@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CommonModule } from '@angular/common';  
+import { CommonModule } from '@angular/common';
 
 import { JsSipService } from './jssip.service';
 import { DirectoryService, DirectoryItemI } from './directory.service';
@@ -47,7 +47,7 @@ export class AppComponent {
     private route: ActivatedRoute,
     private router: Router,
     private http: Http,
-    private translate: TranslateService) { 
+    private translate: TranslateService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('es');
     // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -85,7 +85,7 @@ export class AppComponent {
     });
   }
 
-  
+
   /**
    * Load svg files into material-icons
    * @param icons  Array of svg file names to load, without the extension
