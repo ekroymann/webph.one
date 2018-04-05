@@ -115,8 +115,6 @@ export class AppComponent {
           if (status === false) {
             /** Register user and whait for new user data*/
             this.firstTimeMessage();
-            this.userService.createUser()
-              .catch(console.log);
           /** If the database is fully loaded and there is user data */
           } else if (status === true) {
             /** Start the jsSip connection */

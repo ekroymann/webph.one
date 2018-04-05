@@ -32,8 +32,11 @@ export class StorageService {
     table(name: string): DbTableMethods {
         return {
             create: (data) =>
-                this._db
-                    .post( Object.assign({}, data, { type: name} ) )
+                Observable.fromPromise(
+                    this._db
+                        .post( Object.assign({}, data, { type: name} ) )
+                )
+                .map((result: any) => Object.assign({}, data, {_id: result.id}))
             ,
             read: () =>
                 Observable.fromPromise(
@@ -48,10 +51,12 @@ export class StorageService {
                 Observable.fromPromise(
                     this._db
                         .get(data._id)
-                        .then((doc) =>
-                            this._db
-                                .put( Object.assign({}, doc, data ) )
-                        )
+                        .then((doc) => {
+                            const d = Object.assign({}, doc, data );
+                            return this._db
+                                .put( d )
+                                .then((x: any) => Object.assign({}, d, {_id: x.id, _rev: x.rev}));
+                        })
                 )
             ,
             delete: (data) =>

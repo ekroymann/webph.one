@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { catchError, map, concatMap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GuiNotificationsService } from './gui-notifications.service';
 import { environment } from '../environments/environment';
@@ -26,6 +27,7 @@ export interface UserI {
   user?: string;
   password?: string;
   _id?: string;
+  _rev?: string;
   id?: string;
   push?: PushDataI;
 }
@@ -56,13 +58,9 @@ export class UserService {
     private _swPush: SwPush,
     private _guiNotification: GuiNotificationsService
     ) {
-    _storageService
-      .table('user')
-      .read()
-      .subscribe( (x: UserI[]) => {
-          if (x.length > 0) {
-            this._user.next(x[0]);
-          }
+    this.getOrCreateUser()
+      .subscribe( (user: UserI) => {
+          this._user.next(user);
           this._ready.next(true);
       });
   }
@@ -71,26 +69,37 @@ export class UserService {
     return this._user;
   }
 
-  createUser() {
-    return new Promise((res, rej) => {
-      if (this._busy === true) {
-        rej('Registration in process.');
-      }
-      this._busy = true;
-      this.getNumber()
-        .map(response => response.json())
-        .subscribe(
-          (result: KamailioUserI ) => {
-            this.register({user: result.user, password: result.pwd, email: result.email_address });
-            res(this._user);
-          },
-          (error) => {
-            this._busy = false;
-            this._guiNotification.send({text: 'We could not assign your new phone number. Reload the app later.'});
-            rej(error);
-          }
-        );
-    });
+  getOrCreateUser() {
+    return this._storageService.table('user').read().pipe(
+      concatMap((items: any[]) => {
+        if (items.length > 0) {
+          return Observable.of(items[0]);
+        }
+        return this.getNumber()
+          .map(res => res.json())
+          .map(result => {
+            return {user: result.user, password: result.pwd, email: result.email_address}
+        });
+      }),
+      concatMap((user: any) => {
+        if (user._id !== undefined) {
+          return this._storageService
+            .table('user')
+            .update(Object.assign({}, user))
+        } else {
+          return this._storageService
+            .table('user')
+            .create(user)
+        }
+      }),
+      concatMap((user)=> {
+        return this.subscribeToPush(user)
+      }),
+      catchError((error) => {
+        this._guiNotification.send({text: 'We could not assign your new phone number. Reload the app later.'});
+        throw error;
+      })
+    );
   }
 
   getNumber() {
@@ -118,39 +127,41 @@ export class UserService {
   }
 
   subscribeToPush(user: UserI) {
-    this._http.get(this._pushNotificationServer + 'publicKey')
-    .map(x => x.json())
-    .subscribe(result => {
-      this._swPush.requestSubscription({
-        serverPublicKey: result.key
-      }).then((subscription) => {
-        this.sendRegistration(subscription, user);
-      }).catch((error) => {
-        if ( error ) {
+    return this._http.get(this._pushNotificationServer + 'publicKey')
+      .pipe(
+        map(x => x.json()),
+        concatMap((result) => {
+          return this._swPush.requestSubscription({
+            serverPublicKey: result.key
+          })
+        }),
+        concatMap((subscription) => {
+          return this.sendRegistration(subscription, user);
+        }),
+        catchError((error) => {
           console.log('[PUSH NOTIFICATIONS] - Error on registration', error);
           this._guiNotification.send({
             text:'You have denied permission to show notifications. This permission is used to let you know when there is an incoming call when you have the application closed or in the background.',
             timeout: 10000
           });
-        }
-      })
-    });
+          throw error;
+        })
+      );
   }
 
   sendRegistration(sub: PushSubscription, user: UserI) {
     const rJson: any = sub.toJSON();
-    this._http.post(this._pushNotificationServer + 'save', {
+    return this._http.post(this._pushNotificationServer + 'save', {
       user: user.user,
       endpoint: rJson.endpoint,
       auth: rJson.keys.auth,
       p256dh: rJson.keys.p256dh
-    }).subscribe(x => {
-      this._storageService
+    }).pipe(concatMap(() => {
+      const u = Object.assign({}, user, { push: rJson });
+      return this._storageService
         .table('user')
-        .update(Object.assign({},
-          this._user.getValue(),
-          { push: rJson }
-        ));
-    });
+        .update(u)
+        .map(() => u);
+    }));
   }
 }
